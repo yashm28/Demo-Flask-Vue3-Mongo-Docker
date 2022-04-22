@@ -1,0 +1,58 @@
+version: "3.9"
+services:
+  
+  fontend:
+   build:
+      context: ./frontend
+      dockerfile: Dockerfile
+   ports:
+    -  8080:8080
+   container_name: vuejs-frontend
+   networks:
+    -  fvm-network
+   depends_on:
+    - backend
+
+  backend:
+   build:
+      context: ./backend
+      dockerfile: Dockerfile
+   ports:
+     - 5001:5001
+   container_name: flask-backend
+   networks:
+     - fvm-network
+   depends_on:
+    - db
+
+  db:
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    ports:
+      - 27017:27017
+    container_name: mongo-db
+    networks:
+    -  fvm-network
+
+  mongo_express:
+   image: mongo-express
+   restart: always
+   environment:
+    ME_CONFIG_OPTIONS_EDITORTHEME: ambiance
+    ME_CONFIG_MONGODB_SERVER: mongo-db
+    ME_CONFIG_MONGODB_ADMINUSERNAME: root
+    ME_CONFIG_MONGODB_ADMINPASSWORD: example
+   ports:
+    - 8081:8081
+   depends_on:
+    - db
+   container_name: mongo-express
+   networks:
+    -  fvm-network 
+
+networks:
+  fvm-network:
+    driver: bridge
