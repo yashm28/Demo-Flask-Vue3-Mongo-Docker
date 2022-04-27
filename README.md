@@ -40,9 +40,6 @@ docker-compose build --force-rm && docker-compose up
 ### API Documentation
 
 [Full API Documentation](./backend/README.md)
-
-### API Documentation
-
 ![API Documentation](./screenshots/API%20Documentation.png)
 
 ### MongoDB
