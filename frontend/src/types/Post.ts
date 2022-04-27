@@ -1,5 +1,5 @@
 interface Post {
-    id: number,
+    id: string,
     title: string,
     count: number,
     url: string,

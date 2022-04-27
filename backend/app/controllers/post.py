@@ -4,6 +4,7 @@ sys.path.insert(1, '../controllers')
 from flask import request, abort
 from flask_restx import Namespace, Resource, fields
 from models.post import Post
+import json
 
 api = Namespace('post')
 
@@ -26,6 +27,23 @@ class CreatePost(Resource):
         post = Post(title=title, count=count, url=url)
         post.save()
         return post
+
+@api.route('/createall')
+class CreatePost(Resource):
+
+    @api.marshal_list_with(post, envelope='posts')
+    def post(self):
+        data = request.get_json()
+        print(data)
+        posts = []
+        for record in data.get('posts'):
+            title = record.get('title')
+            count = record.get('count')
+            url = record.get('url')
+            post = Post(title=title, count=count, url=url)
+            posts.append(post)
+        res = Post.objects.insert(posts)
+        return res
 
 @api.route('/getall')
 class CreatePost(Resource):
